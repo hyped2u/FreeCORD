@@ -77,8 +77,8 @@ FreeCORD'u yerel ağınızda veya bulut sunucunuzda çalıştırmak için aşağ
 ### 1. Projeyi Klonlayın
 
 ```bash
-git clone [https://github.com/KULLANICI_ADINIZ/freecord.git](https://github.com/hyped2u/FreeCORD.git)
-cd freecord
+git clone https://github.com/hyped2u/FreeCORD.git
+cd FreeCORD
 ```
 
 ### 2. Bağımlılıkları Yükleyin
