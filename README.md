@@ -7,6 +7,7 @@
 ![Socket.IO](https://img.shields.io/badge/Socket.io-black?style=flat-square&logo=socket.io&badgeColor=010101)
 ![WebRTC](https://img.shields.io/badge/WebRTC-333333?style=flat-square&logo=webrtc&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat-square&logo=docker&logoColor=white)
+![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=flat-square&logo=sqlite&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)
 
 *Bağımsız topluluklar için sıfır telemetri ve uçtan uca kontrol imkanı sunan, WebRTC tabanlı modern iletişim altyapısı.*
@@ -43,6 +44,7 @@ Modern mimari standartlarına uygun olarak inşa edilen FreeCORD'un arka planın
 | **Medya (A/V)** | `LiveKit`, `WebRTC` | Düşük gecikmeli donanımsal ses (Opus) ve görüntü aktarımı. |
 | **Konteyner** | `Docker` | Medya sunucusu ve bağımlılıkların izole bir şekilde çalıştırılması. |
 | **Frontend** | `HTML5`, `CSS3`, `JS` | Hafif, dinamik ve sürükle-bırak destekli kullanıcı arayüzü. |
+| **VeriTabanı** | `SQLite`, `SQAlchemy` | Hafif, sunucusuz veri depolama (İstenirse PostgreSQL'e kolayca geçirilebilir). |
 
 ---
 
