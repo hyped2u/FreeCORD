@@ -75,13 +75,15 @@ FreeCORD'u yerel ağınızda veya bulut sunucunuzda çalıştırmak için aşağ
 ### 1. Projeyi Klonlayın
 
 ```bash
-git clone https://github.com/KULLANICI_ADINIZ/freecord.git
+git clone [https://github.com/KULLANICI_ADINIZ/freecord.git](https://github.com/KULLANICI_ADINIZ/freecord.git)
 cd freecord
+```
 
-2. Bağımlılıkları Yükleyin
+### 2. Bağımlılıkları Yükleyin
+
 İzole bir sanal ortam (virtual environment) kullanmanız şiddetle tavsiye edilir:
 
-Bash
+```bash
 python -m venv venv
 
 # Linux/macOS için:
@@ -91,43 +93,56 @@ source venv/bin/activate
 venv\Scripts\activate     
 
 pip install -r requirements.txt
-3. LiveKit Sunucusunu Başlatın
+```
+
+### 3. LiveKit Sunucusunu Başlatın
+
 Medya akışının dışarı çıkmaması için LiveKit sunucusunu Docker üzerinden başlatın:
 
-Bash
+```bash
 docker run -d --name livekit \
   -p 7880:7880 \
   -p 7881:7881 \
   -p 7882:7882/udp \
   -e LIVEKIT_KEYS="key: secret" \
   livekit/livekit-server --dev
-Not: Üretime alırken (production) LIVEKIT_KEYS parametresindeki key ve secret değerlerini tahmin edilemez, güçlü şifrelerle değiştirmeyi unutmayın.
+```
 
-4. Ortam Değişkenlerini Ayarlayın
-Projenin ana dizininde bir .env dosyası oluşturun ve LiveKit bilgilerinizi ekleyin:
+> **Not:** Üretime alırken (production) `LIVEKIT_KEYS` parametresindeki `key` ve `secret` değerlerini tahmin edilemez, güçlü şifrelerle değiştirmeyi unutmayın.
 
-Code snippet
+### 4. Ortam Değişkenlerini Ayarlayın
+
+Projenin ana dizininde bir `.env` dosyası oluşturun ve LiveKit bilgilerinizi ekleyin:
+
+```env
 LIVEKIT_API_KEY=key
 LIVEKIT_API_SECRET=secret
 LIVEKIT_URL=ws://127.0.0.1:7880
 SECRET_KEY=guvenli_ve_karmasik_bir_gizli_anahtar
-5. Uygulamayı Başlatın
+```
+
+### 5. Uygulamayı Başlatın
+
 Tüm ayarlar tamamsa, sunucuyu ayağa kaldırın:
 
-Bash
+```bash
 python app.py
-Uygulama varsayılan olarak [http://127.0.0.1:5000](http://127.0.0.1:5000) adresinde hizmet vermeye başlayacaktır. Tarayıcınız üzerinden platforma giriş yapıp ilk hesabı oluşturarak yönetici yetkisine sahip olabilirsiniz.
+```
 
-Katkıda Bulunma
-Bu depoyu Fork'layın.
+Uygulama varsayılan olarak `http://127.0.0.1:5000` adresinde hizmet vermeye başlayacaktır. Tarayıcınız üzerinden platforma giriş yapıp ilk hesabı oluşturarak yönetici yetkisine sahip olabilirsiniz.
 
-Kendi özellik dalınızı oluşturun: git checkout -b ozellik/YeniOzellik
+---
 
-Değişikliklerinizi commit edin: git commit -m 'Yeni özellik eklendi'
+## Katkıda Bulunma
 
-Dalınıza pushlayın: git push origin ozellik/YeniOzellik
+1. Bu depoyu Fork'layın.
+2. Kendi özellik dalınızı oluşturun: `git checkout -b ozellik/YeniOzellik`
+3. Değişikliklerinizi commit edin: `git commit -m 'Yeni özellik eklendi'`
+4. Dalınıza pushlayın: `git push origin ozellik/YeniOzellik`
+5. Bir Pull Request (PR) açın.
 
-Bir Pull Request (PR) açın.
+---
 
-Lisans
-Bu proje MIT Lisansı ile lisanslanmıştır. Kodu inceleyebilir, dağıtabilir ve kendi projelerinizde özgürce kullanabilirsiniz. Ayrıntılar için LICENSE dosyasına göz atın.
+## Lisans
+
+Bu proje **MIT Lisansı** ile lisanslanmıştır. Kodu inceleyebilir, dağıtabilir ve kendi projelerinizde özgürce kullanabilirsiniz. Ayrıntılar için `LICENSE` dosyasına göz atın.
