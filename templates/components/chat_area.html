@@ -1,0 +1,53 @@
+<div class="main-chat">
+    <div class="chat-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 4px;">
+            <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Menüyü Aç/Kapat">☰</button>
+            <div id="current-channel-header"><span style="color: #80848e; font-size: 20px;">#</span> genel-sohbet</div>
+        </div>
+        
+        <div id="voice-mode-toggles" style="display: none; background: #1e1f22; border-radius: 8px; padding: 4px; gap: 5px;">
+            <button id="btn-msg-mode" class="action-btn btn-primary" style="padding: 4px 10px; font-size: 13px; min-width: auto;" onclick="switchChatMode('message')">Sohbet</button>
+            <button id="btn-vid-mode" class="action-btn btn-secondary" style="padding: 4px 10px; font-size: 13px; min-width: auto;" onclick="switchChatMode('video')">Yayın</button>
+        </div>
+        <button class="sidebar-toggle-btn" onclick="toggleRightSidebar()" title="Kullanıcılar" style="margin:0;">👥</button>
+    </div>
+    
+    <div class="chat-messages" id="chat-messages">
+        <div class="message">
+            <div class="msg-avatar">S</div>
+            <div class="msg-content">
+                <div class="msg-header">
+                    <span class="msg-author" style="color: #ff0000;">Sistem</span>
+                    <span class="msg-time">Şimdi</span>
+                </div>
+                <div class="msg-text">yourname Chat sunucusuna hoş geldiniz.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VİDEO VE YAYIN ALANI (Gizli Başlar) -->
+    <div class="video-area" id="video-area" style="display: none; flex-grow: 1; padding: 20px; overflow-y: auto; background-color: #000000; justify-content: center; align-items: center;">
+        <div id="video-grid" class="video-grid">
+            <!-- Videolar (Webcam / Ekran Paylaşımı) Buraya Eklenecek -->
+        </div>
+    </div>
+
+    <div class="chat-input-area" id="input-area-container">
+        <!-- Yazıyor göstergesi -->
+        <div id="typing-indicator" style="display: none; color: #b5bac1; font-size: 13px; margin-bottom: 8px; margin-left: 5px; font-style: italic;">
+            <!-- İçerik dinamik gelecek -->
+        </div>
+        
+        <div class="chat-input-box" style="display: flex; align-items: center; gap: 10px;">
+            
+            <input type="file" id="image-input" accept="image/*" style="display:none;" onchange="sendMessage({key: 'Enter'})">
+            
+            <button onclick="document.getElementById('image-input').click()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #b9bbbe; padding: 0;">
+                ➕
+            </button>
+            
+            <input type="text" id="message-input" placeholder="#genel-sohbet kanalına mesaj gönder..." autocomplete="off" onkeypress="sendMessage(event)" style="flex-grow: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px;">
+            
+        </div>
+    </div>
+</div>

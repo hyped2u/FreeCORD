@@ -1,0 +1,161 @@
+<div class="modal-overlay" id="profileModal" onclick="closeProfileModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+        <div class="modal-banner">
+            <div class="modal-avatar-wrapper">
+                <div class="modal-avatar my-avatar" id="modal-avatar-preview" {% if current_user.avatar_url %}style="background-image: url('{{ current_user.avatar_url }}');"{% endif %}>
+                    {% if not current_user.avatar_url %}{{ (current_user.display_name or current_user.username)[0]|upper }}{% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div id="profile-view-mode">
+            <div class="modal-body">
+                <div class="profile-username" id="modal-display-name">{{ current_user.display_name or current_user.username }}</div>
+                <div class="profile-bio" id="modal-bio-text">{{ current_user.bio or 'Henüz bir biyografi eklenmemiş.' }}</div>
+                <div class="profile-divider"></div>
+                <div class="info-label">Hesap Rolü</div>
+                <div class="profile-row-value">
+                    {% if current_user.role %}{{ current_user.role.name }}{% else %}Üye{% endif %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn btn-secondary" onclick="closeProfileModal()">Kapat</button>
+                <button class="action-btn btn-primary" onclick="toggleEditMode(true)">Profili Düzenle</button>
+            </div>
+        </div>
+
+        <div id="profile-edit-mode" style="display: none;">
+            <div class="modal-body" style="padding-top: 65px;">
+                <label class="info-label">Görünen Ad</label>
+                <input type="text" id="edit-display-name" class="edit-input" value="{{ current_user.display_name or current_user.username }}" placeholder="Sohbette görünecek adınız">
+                
+                <label class="info-label">Profil Fotoğrafı Seç</label>
+                <input type="file" id="edit-avatar-file" class="edit-input" accept="image/*">
+                <input type="hidden" id="edit-avatar-url" value="{{ current_user.avatar_url or '' }}">
+                
+                <label class="info-label">Hakkımda</label>
+                <textarea id="edit-bio" class="edit-textarea" placeholder="Kendinden biraz bahset...">{{ current_user.bio or '' }}</textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn btn-secondary" onclick="toggleEditMode(false)">İptal</button>
+                <button class="action-btn btn-primary" onclick="saveProfile()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="addUserModal" onclick="closeAddUserModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()" style="padding: 20px; width: 350px;">
+        <h3 style="color: white; margin-top: 0; margin-bottom: 20px;">Yeni Kullanıcı Ekle</h3>
+        <label class="info-label">Kullanıcı Adı</label>
+        <input type="text" id="new-username" class="edit-input" placeholder="Yeni hesap adı">
+        <label class="info-label">Şifre</label>
+        <input type="password" id="new-password" class="edit-input" placeholder="Yeni hesap şifresi">
+        <div class="modal-footer" style="background: transparent; padding: 10px 0 0 0;">
+            <button class="action-btn btn-secondary" onclick="closeAddUserModal()">İptal</button>
+            <button class="action-btn btn-primary" onclick="submitNewUser()">Kullanıcıyı Yarat</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="viewProfileModal" onclick="document.getElementById('viewProfileModal').style.display='none'">
+    <div class="modal-card" onclick="event.stopPropagation()">
+        
+        <!-- Yükleniyor Ekranı -->
+        <div id="vp-loading" style="padding: 40px; text-align: center; color: white;">
+            <div style="width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #5865F2; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px auto;"></div>
+            <div>Profil Yükleniyor...</div>
+        </div>
+
+        <!-- Yüklendiğinde Gösterilecek Profil İçeriği -->
+        <div id="vp-content" style="display: none;">
+            <!-- Kapak Fotoğrafı / Banner -->
+            <div class="modal-banner" id="vp-banner">
+                <!-- Avatar Kesişimi -->
+                <div class="modal-avatar-wrapper">
+                    <div class="modal-avatar" id="vp-avatar" style="position: relative;">
+                        <span id="vp-avatar-text"></span>
+                        <!-- Durum Noktası -->
+                        <div class="status-dot" id="vp-status" style="width: 20px; height: 20px; border-width: 4px; border-color: #1e1f22; bottom: 0px; right: 0px;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-body" style="padding-top: 50px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <div class="profile-username" id="vp-name">Kullanıcı Adı</div>
+                        <div style="font-size: 13px; color: #b5bac1;" id="vp-real-username-display">@username</div>
+                    </div>
+                    <button onclick="startDM()" class="action-btn btn-primary">Mesaj Gönder</button>
+                </div>
+                
+                <!-- Rozetler / Roller -->
+                <div style="margin-top: 15px; margin-bottom: 15px;">
+                    <span id="vp-role-badge" class="role-badge" style="background-color: rgba(88,101,242,0.2); color: #5865F2; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">Üye</span>
+                </div>
+                
+                <div class="profile-divider"></div>
+                
+                <div id="vp-volume-container" style="display: none; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <span class="info-label" style="margin-bottom: 0; color: #f2f3f5;">🔊 Kullanıcı Sesi</span>
+                        <span id="vp-volume-label" style="color: #b5bac1; font-size: 12px; font-weight: bold;">%100</span>
+                    </div>
+                    <input type="range" id="vp-volume-slider" min="0" max="200" value="100" style="width: 100%; cursor: pointer; accent-color: #5865F2;" oninput="changeUserVolume(this.value)" onchange="changeUserVolume(this.value)">
+                </div>
+
+                <div id="vp-pan-container" style="display: none; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <span class="info-label" style="margin-bottom: 0; color: #f2f3f5;">🎧 3D Ses Dengesi</span>
+                        <span id="vp-pan-label" style="color: #b5bac1; font-size: 12px; font-weight: bold;">Merkez</span>
+                    </div>
+                    <input type="range" id="vp-pan-slider" min="-100" max="100" value="0" style="width: 100%; cursor: pointer; accent-color: #5865F2;" oninput="changeUserPan(this.value)" onchange="changeUserPan(this.value)">
+                </div>
+
+                <div class="info-label">Hakkımda</div>
+                <div class="profile-row-value" id="vp-bio" style="white-space: pre-wrap; margin-bottom: 0;">Henüz bir biyografi eklemedi.</div>
+                
+                <input type="hidden" id="vp-real-username">
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div class="modal-overlay" id="adminPanelModal" onclick="closeAdminPanel(event)" style="display:none;">
+    <div class="modal-card" onclick="event.stopPropagation()" style="padding: 20px; width: 450px; max-height: 80vh; overflow-y: auto;">
+        <h3 style="color: white; margin-top: 0; margin-bottom: 20px;">🛠️ Yönetim Paneli</h3>
+        
+        <h4 style="color: #f1c40f; border-bottom: 1px solid #3f4147; padding-bottom: 5px;">Kanal Yönetimi</h4>
+        <div id="admin-channels-list" style="margin-bottom: 15px; color: white;">
+            <!-- Dinamik gelecek -->
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+            <input type="text" id="new-channel-name" class="edit-input" placeholder="Yeni Kanal Adı" style="margin-bottom: 0;">
+            <select id="new-channel-type" class="edit-input" style="width: auto; margin-bottom: 0;">
+                <option value="text">Yazılı</option>
+                <option value="voice">Sesli</option>
+            </select>
+            <button class="action-btn btn-primary" onclick="createChannel()">Ekle</button>
+        </div>
+
+        <h4 style="color: #f1c40f; border-bottom: 1px solid #3f4147; padding-bottom: 5px;">Yetkilendirme</h4>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="admin-role-username" class="edit-input" placeholder="Kullanıcı Adı" style="margin-bottom: 0;">
+            <select id="admin-role-select" class="edit-input" style="width: auto; margin-bottom: 0;">
+                <option value="Kurucu">Kurucu Yap</option>
+                <option value="Üye">Üye Yap</option>
+            </select>
+            <button class="action-btn btn-primary" onclick="changeUserRole()">Uygula</button>
+        </div>
+
+        <div class="modal-footer" style="background: transparent; padding: 20px 0 0 0;">
+            <button class="action-btn btn-secondary" onclick="closeAdminPanel()">Kapat</button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>

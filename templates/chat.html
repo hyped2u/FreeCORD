@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOURNAME Chat</title>
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- STATİK CSS BAĞLANTISI -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_style.css') }}?v=13">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+</head>
+<body>
+
+    <!-- SOL PANEL -->
+    {% include 'components/sidebar_left.html' %}
+
+    <!-- ORTA MESAJ ALANI -->
+    {% include 'components/chat_area.html' %}
+
+    <!-- SAĞ KULLANICI LİSTESİ -->
+    {% include 'components/sidebar_right.html' %}
+
+    <!-- MODALLAR (Açılır Pencereler) -->
+    {% include 'components/modals.html' %}
+
+    <!-- RADYO PENCERESİ -->
+    <div id="radio-container" class="radio-container">
+        <div class="radio-header" onclick="if(this.parentElement.classList.contains('mobile-collapsed')) toggleRadio();">
+            <span>📻 yourname Radyo</span>
+            <button onclick="toggleRadio(); event.stopPropagation();" class="radio-toggle-btn">-</button>
+        </div>
+        <div id="radio-body" class="radio-body" style="position: relative;">
+            <div id="youtube-overlay" style="position: absolute; top:0; left:0; width:100%; height:160px; z-index:10; background:transparent;"></div>
+            <div id="youtube-player"></div>
+            <div id="current-song-info" class="current-song-info">Şu an çalan: Yok</div>
+            
+            <div class="radio-controls">
+                <input type="text" id="radio-search-input" placeholder="Şarkı adı / link..." onkeypress="if(event.key==='Enter') submitRadioRequest()">
+                <button onclick="submitRadioRequest()">ÖNER</button>
+            </div>
+            
+            <div style="margin-top: 5px; margin-bottom: 10px; display:flex; align-items:center; gap:5px;">
+                <span style="font-size:12px; color:#b5bac1;">🔊 Ses:</span>
+                <input type="range" id="radio-volume" min="0" max="100" value="50" style="width: 100%; cursor:pointer;" onchange="changeRadioVolume(this.value)" oninput="changeRadioVolume(this.value)">
+            </div>
+            
+            <div class="suggestions-header">Sıradaki Öneriler</div>
+            <div id="radio-suggestions" class="radio-suggestions">
+            </div>
+        </div>
+    </div>
+
+    <!-- SÜRÜKLE BIRAK OVERLAY -->
+    <div id="drag-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; color:white; font-size:32px; font-weight:bold; justify-content:center; align-items:center; flex-direction:column; border: 4px dashed #5865F2; box-sizing: border-box;">
+        <span style="font-size:64px;">📥</span>
+        <span>Fotoğrafı Buraya Bırakın</span>
+    </div>
+
+    <!-- LIGHTBOX (Görsel Önizleme) -->
+    <div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; justify-content:center; align-items:center; cursor:zoom-out;" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="" style="max-width:90%; max-height:90%; border-radius:8px; box-shadow:0 0 20px rgba(0,0,0,0.5);">
+    </div>
+
+    <!-- TOAST BİLDİRİM HAVUZU -->
+    <div id="toast-container" style="position:fixed; top:20px; right:20px; z-index:9999; display:flex; flex-direction:column; gap:10px;"></div>
+
+    <!-- STATİK JS BAĞLANTISI VE YOUTUBE API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="{{ url_for('static', filename='js/chat_app_v2.js') }}?v=22"></script>
+</body>
+</html>

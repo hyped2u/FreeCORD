@@ -1,0 +1,15 @@
+<div class="sidebar-right">
+    <div class="role-group">Çevrimiçi</div>
+    <div class="user-item">
+        <div class="avatar my-avatar" {% if current_user.avatar_url %}style="background-image: url('{{ current_user.avatar_url }}');"{% endif %}>
+            {% if not current_user.avatar_url %}{{ (current_user.display_name or current_user.username)[0]|upper }}{% endif %}
+            <div class="status-dot"></div>
+        </div>
+        <div>
+            <span style="font-weight: 500; color: white;" id="sidebar-display-name">{{ current_user.display_name or current_user.username }}</span>
+            {% if current_user.role %}
+            <span class="role-badge" style="background-color: {{ current_user.role.color }}20; color: {{ current_user.role.color }}; margin-left: 5px;">{{ current_user.role.name }}</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
