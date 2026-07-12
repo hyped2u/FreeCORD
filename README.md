@@ -76,3 +76,61 @@ FreeCORD'u yerel ağınızda veya bulut sunucunuzda çalıştırmak için aşağ
 ```bash
 git clone [https://github.com/KULLANICI_ADINIZ/freecord.git](https://github.com/KULLANICI_ADINIZ/freecord.git)
 cd freecord
+
+### 2. Bağımlılıkları Yükleyin
+
+İzole bir sanal ortam (virtual environment) kullanmanız şiddetle tavsiye edilir:
+
+```bash
+python -m venv venv
+
+# Linux/macOS için:
+source venv/bin/activate  
+
+# Windows için:
+venv\Scripts\activate     
+
+pip install -r requirements.txt
+
+3. LiveKit Sunucusunu Başlatın
+Medya akışının dışarı çıkmaması için LiveKit sunucusunu Docker üzerinden başlatın:
+
+Bash
+docker run -d --name livekit \
+  -p 7880:7880 \
+  -p 7881:7881 \
+  -p 7882:7882/udp \
+  -e LIVEKIT_KEYS="key: secret" \
+  livekit/livekit-server --dev
+Not: Üretime alırken (production) LIVEKIT_KEYS parametresindeki key ve secret değerlerini tahmin edilemez, güçlü şifrelerle değiştirmeyi unutmayın.
+
+4. Ortam Değişkenlerini Ayarlayın
+Projenin ana dizininde bir .env dosyası oluşturun ve LiveKit bilgilerinizi ekleyin:
+
+Code snippet
+LIVEKIT_API_KEY=key
+LIVEKIT_API_SECRET=secret
+LIVEKIT_URL=ws://127.0.0.1:7880
+SECRET_KEY=guvenli_ve_karmasik_bir_gizli_anahtar
+5. Uygulamayı Başlatın
+Tüm ayarlar tamamsa, sunucuyu ayağa kaldırın:
+
+Bash
+python app.py
+Uygulama varsayılan olarak http://127.0.0.1:5000 adresinde hizmet vermeye başlayacaktır. Tarayıcınız üzerinden platforma giriş yapıp ilk hesabı oluşturarak yönetici yetkisine sahip olabilirsiniz.
+
+Katkıda Bulunma
+Bu depoyu Fork'layın.
+
+Kendi özellik dalınızı oluşturun: git checkout -b ozellik/YeniOzellik
+
+Değişikliklerinizi commit edin: git commit -m 'Yeni özellik eklendi'
+
+Dalınıza pushlayın: git push origin ozellik/YeniOzellik
+
+Bir Pull Request (PR) açın.
+
+Lisans
+Bu proje MIT Lisansı ile lisanslanmıştır. Kodu inceleyebilir, dağıtabilir ve kendi projelerinizde özgürce kullanabilirsiniz. Ayrıntılar için LICENSE dosyasına göz atın.
+
+
