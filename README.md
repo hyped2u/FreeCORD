@@ -73,15 +73,15 @@ Modern mimari standartlarına uygun olarak inşa edilen FreeCORD'un arka planın
 FreeCORD'u yerel ağınızda veya bulut sunucunuzda çalıştırmak için aşağıdaki adımları izleyebilirsiniz.
 
 ### 1. Projeyi Klonlayın
+
 ```bash
-git clone [https://github.com/KULLANICI_ADINIZ/freecord.git](https://github.com/KULLANICI_ADINIZ/freecord.git)
+git clone https://github.com/KULLANICI_ADINIZ/freecord.git
 cd freecord
 
-### 2. Bağımlılıkları Yükleyin
-
+2. Bağımlılıkları Yükleyin
 İzole bir sanal ortam (virtual environment) kullanmanız şiddetle tavsiye edilir:
 
-```bash
+Bash
 python -m venv venv
 
 # Linux/macOS için:
@@ -91,7 +91,6 @@ source venv/bin/activate
 venv\Scripts\activate     
 
 pip install -r requirements.txt
-
 3. LiveKit Sunucusunu Başlatın
 Medya akışının dışarı çıkmaması için LiveKit sunucusunu Docker üzerinden başlatın:
 
@@ -117,7 +116,7 @@ Tüm ayarlar tamamsa, sunucuyu ayağa kaldırın:
 
 Bash
 python app.py
-Uygulama varsayılan olarak http://127.0.0.1:5000 adresinde hizmet vermeye başlayacaktır. Tarayıcınız üzerinden platforma giriş yapıp ilk hesabı oluşturarak yönetici yetkisine sahip olabilirsiniz.
+Uygulama varsayılan olarak [http://127.0.0.1:5000](http://127.0.0.1:5000) adresinde hizmet vermeye başlayacaktır. Tarayıcınız üzerinden platforma giriş yapıp ilk hesabı oluşturarak yönetici yetkisine sahip olabilirsiniz.
 
 Katkıda Bulunma
 Bu depoyu Fork'layın.
@@ -132,5 +131,3 @@ Bir Pull Request (PR) açın.
 
 Lisans
 Bu proje MIT Lisansı ile lisanslanmıştır. Kodu inceleyebilir, dağıtabilir ve kendi projelerinizde özgürce kullanabilirsiniz. Ayrıntılar için LICENSE dosyasına göz atın.
-
-
